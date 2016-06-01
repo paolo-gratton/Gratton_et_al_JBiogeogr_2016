@@ -1,6 +1,3 @@
-# OLD NAME = 6.total_decent_records.r
-
-
 library(raster)
 library(rgdal)
 
