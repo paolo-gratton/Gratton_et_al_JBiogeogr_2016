@@ -430,7 +430,7 @@ for(i in 1:nrow(geo.split)){
 	dir = gsub("\\<SA\\>", ",Southern Australia,", dir)
 	dir = gsub("\\<WA\\>", ",Western Australia,", dir)
 	dir = gsub("\\<T[Aa][Ss]\\>", ",Tasmania,", dir)
-	} # ONCE (luckily NOT in Australia) NSW stands for "North-South-West"!!! Che cazzo vòr di'???!!!!)
+	} # ONCE (luckily NOT in Australia) NSW stands for "North-South-West"!!! Che cazzo vÃ²r di'???!!!!)
 	
 	# Remove "State" except in "State Forest"
 	dir = gsub("State Forest", "Xtate Forest", dir)
@@ -451,7 +451,7 @@ for(i in 1:nrow(geo.split)){
 	  dir = gsub("([A-Z][a-z]{1,} )dos( [A-Z][a-z]{1,})","\\1Dos\\2",dir)
 	  dir = gsub("([A-Z][a-z]{1,} )do( [A-Z][a-z]{1,})","\\1Do\\2",dir)
 	  dir = gsub("([A-Z][a-z]{1,} )in( [A-Z][a-z]{1,})","\\1In\\2",dir) # inutile! Si recuperano, forse 2 posti in Italia e basta!!
-	  dir = gsub("([A-Z][a-z]{1,}) en ([A-Z][a-z]{1,})","\\1-En-\\2",dir) # almeno in Francia, scrivono così.. saranno sì e no 3 o 4..
+	  dir = gsub("([A-Z][a-z]{1,}) en ([A-Z][a-z]{1,})","\\1-En-\\2",dir) # almeno in Francia, scrivono cosÃ¬.. saranno sÃ¬ e no 3 o 4..
 	  dir = gsub("([A-Z][a-z]{1,} )les( [A-Z][a-z]{1,})","\\1Les\\2",dir)
 	  dir = gsub("([A-Z][a-z]{1,} )d'([A-Z][a-z]{1,})","\\1D'\\2",dir)
 	  dir = gsub("([A-Z][a-z]{1,} )de'( [A-Z][a-z]{1,})","\\1De'\\2",dir)
