@@ -1,9 +1,20 @@
-Summary of analysis pipeline for:
-Gratton et al. (2016) "A world of sequences: can we use georeferenced nucleotide databases for a robust automated phylogeography?" Journal of Biogeography
+## Summary of analysis pipeline for:
+## Gratton et al. (2016) "A world of sequences: can we use georeferenced nucleotide databases for a robust automated phylogeography?" Journal of Biogeography
+
+## Each step of our analysis is briefly described in this file, and the relevant scripts are listed together with their input and output.
+
+
 
 1. Identify target species
 
 Mostly a 'manual' step. Download authoritative lists of tetrapod species and convert formats to be readable by http://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi
+
+1.identify_target_species.r uses:
+	raw files with lists of species downloaded from different sources
+1.identify_target_species.r returns:	
+	text files formatted for NCBI taxon identifiers (http://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi)
+	
+
 
 
 2. NCBI TaxonIDs identification
@@ -14,6 +25,8 @@ Converts species lists to tables with NCBI taxon identifiers for species, genus 
 	species lists+taxdump
 2.get_NCBI_taxonomy.r returns: 
 	<class>.taxlist.NCBI.txt files
+
+
 
 
 3. Search INSDC - “DDBJ/EMBL/GenBank (INSDC) with limits” filter
@@ -27,13 +40,16 @@ Launches Python script search_GB.py and creates a metadata table for INDSC acces
 excluded: sequences longer than 20,000bp / humans and domesticated species / more than 10,000 seqs per species
 
 
-4. Download and prepare geographic dbs
+
+
+4. Download and prepare geographic databases
+
 4.GADM preparation.r
 : administrative boundaries - http://biogeo.ucdavis.edu/data/gadm2/gadm_v2_shp.zip and http://biogeo.ucdavis.edu/data/gadm2/gadm_v2_mdb.zip
 4.Geonames preparation.r
 : toponyms - allCountries.zip from http://download.geonames.org/export/dump/ 
 
-GADM shapefile: it was subsetted on the ISO3 field using standard GIS software (different shapefiles for different countries) to produce gadm2_ISO__XXX.shp files
+GADM shapefile: it was split on the ISO3 field using standard GIS software (different shapefiles for different countries) to produce gadm2_ISO__XXX.shp files
 
 GADM - Problems with non-standard Latin letters (e.g., ã): we used the ESRI personal geodatabase (gadm_v2_mdb.zip) as a starting point to convert the non-standard Latin letters to standard Latin. Subsequently we used the converted table to perform the searches and the shapefile (gadm_v2_shp.zip) to work with the geographic attributes (areas, intersections, etc.): they are given in the same order!!
 
@@ -48,6 +64,8 @@ Geonames: Add the ISO3 code / remove A class toponyms (Administrative units repr
 	geonames.org.allCountries.txt + countries_and_country_codes_geonames.csv
 4.GeoNames preparation.r returns: 
 	.txt of the toponyms split by country (geonames_simplified_XXX.txt)
+
+
 
 
 5. Prepare INSDC data
@@ -71,6 +89,8 @@ Geonames: Add the ISO3 code / remove A class toponyms (Administrative units repr
 	geo.only_split.csv
 
 
+
+
 6.geocode
 Perform the search in the geographic dbs using different criteria. See supplementary material for a description of the geocoding algorithm
 
@@ -90,6 +110,8 @@ Assign the result of the geocoding to the original db (in which duplicated recor
 	GB_geomatched.csv
 
 
+
+
 8.check_for_concordance
 For those INSDC accessions that contained a ‘lat_lon’ value, compare the coordinates assigned by geocoding with those provided by the authors (duplicated records were removed to avoid influences of records sharing the same textual description)
 
@@ -97,6 +119,8 @@ For those INSDC accessions that contained a ‘lat_lon’ value, compare the coo
 	GB_geomatched.csv + country_fields_with_lat_lon.csv + world.shp
 8.check_for_concordance.r returns:
 	referencing.errors.csv + distance distribution.csv + (selected) distance distribution.pdf
+
+
 
 
 9.select_acceptable_records
@@ -108,6 +132,8 @@ Select acceptable records from GB_geomatched.csv, applying different criteria: p
 acceptable_records.csv + spatial_coverage.pdf
 
 
+
+
 10.Matching loop
 Simplify GB_all_vertebrates.txt and assign coordinates to the records with an acceptable geocoding
 
@@ -116,6 +142,8 @@ Simplify GB_all_vertebrates.txt and assign coordinates to the records with an ac
 10.matching_loop.r returns:
 	GB_all_vertebrates_GEOREF.txt
 
+
+
 11.conversion_of_species_binomials
 Convert, whenever possible, the INSDC binomials to IUCN binomials to compare sequence distribution to IUCN species range. IUCN binomials were manually obtained from the shapefiles
 
@@ -123,6 +151,8 @@ Convert, whenever possible, the INSDC binomials to IUCN binomials to compare seq
  IUCN species names.csv+GB_all_vertebrates_GEOREF.txt
 11.conversion_of_species_binomial.r returns:
 	iucn-ncbi_conversion.csv+georef_data.csv
+
+
 
 
 12.Cluster sequences by genus
@@ -134,6 +164,8 @@ Launch the function clusterGBbyGenus() to perform genus-level sequence clusterin
 	seq_clusters_0.80_optimal.txt + clustering_errors_0.80_optimal.txt
 
 
+
+
 13.Select clusters
 Select clusters created by the previous script (number of sequences greater than 19)
 
@@ -141,6 +173,8 @@ Select clusters created by the previous script (number of sequences greater than
  	seq_clusters_0.80_optimal.txt + GB_all_vertebrates_GEOREF.txt
 13.select_clusters.r returns:
  	genus_clusters_GEOREF.csv + species_clusters_GEOREF.csv
+
+
 
 
 14.Analyse spatial coverage
